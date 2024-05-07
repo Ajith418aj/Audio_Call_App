@@ -1,0 +1,86 @@
+{
+  "project_info": {
+    "project_number": "679269763446",
+    "project_id": "phone-otp-9b509",
+    "storage_bucket": "phone-otp-9b509.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:679269763446:android:001e26bfa01e108cce5257",
+        "android_client_info": {
+          "package_name": "com.example.audio_call"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTCs2E1Q-IsRU0Sn7e25il-bYYZeduvD4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:679269763446:android:2cfdd08893e43096ce5257",
+        "android_client_info": {
+          "package_name": "com.example.easychat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTCs2E1Q-IsRU0Sn7e25il-bYYZeduvD4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:679269763446:android:426f8a2d9657feddce5257",
+        "android_client_info": {
+          "package_name": "com.example.phoneverification"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTCs2E1Q-IsRU0Sn7e25il-bYYZeduvD4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:679269763446:android:9324b4b4eba3fbf1ce5257",
+        "android_client_info": {
+          "package_name": "com.example.phoneverification2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTCs2E1Q-IsRU0Sn7e25il-bYYZeduvD4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

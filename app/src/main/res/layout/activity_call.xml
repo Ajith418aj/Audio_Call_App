@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
+    tools:context=".Call">
+
+    <!-- Place customView centered horizontally -->
+    <com.example.audio_call.views.CustomView
+        android:id="@+id/customView"
+        android:layout_width="272dp"
+        android:layout_height="88dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        tools:ignore="MissingConstraints" />
+
+    <!-- Place imageView to the left of customView -->
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="46dp"
+        android:layout_height="49dp"
+        android:layout_toLeftOf="@+id/customView"
+        android:layout_centerVertical="true"
+        app:srcCompat="@drawable/speak" />
+
+    <!-- Place imageView2 to the right of customView -->
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="44dp"
+        android:layout_height="45dp"
+        android:layout_toRightOf="@+id/customView"
+        android:layout_centerVertical="true"
+        app:srcCompat="@drawable/listen" />
+
+    <!-- Place animation_switch button below customView -->
+    <Button
+        android:id="@+id/animation_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Animation ON"
+        android:layout_below="@+id/customView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp" />
+
+    <!-- Place mic and end_call buttons at the bottom, opposite to each other -->
+    <ImageView
+        android:id="@+id/mic"
+        android:layout_width="38dp"
+        android:layout_height="64dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="73dp"
+        android:layout_marginBottom="16dp"
+        android:layout_toStartOf="@+id/loudspeaker"
+        android:contentDescription="@string/mic_img"
+        android:tag="mic_off"
+        app:srcCompat="@drawable/mute" />
+
+    <ImageView
+        android:id="@+id/end_call"
+        android:layout_width="78dp"
+        android:layout_height="47dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="24dp"
+        app:srcCompat="@drawable/endcall" />
+
+    <ImageView
+        android:id="@+id/loudspeaker"
+        android:layout_width="78dp"
+        android:layout_height="47dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="156dp"
+        android:layout_marginBottom="25dp"
+        android:tag="loudspeaker_off"/>
+        <!--app:srcCompat="@drawable/loud_speaker_off" -->
+
+
+    <!--    <TextView-->
+<!--        android:id="@+id/lostPacketName"-->
+<!--        android:layout_width="132dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentStart="true"-->
+<!--        android:layout_alignParentTop="true"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:layout_marginTop="100dp"-->
+<!--        android:layout_marginEnd="261dp"-->
+<!--        android:layout_marginRight="20dp"-->
+<!--        android:ems="10"-->
+<!--        android:inputType="textPersonName"-->
+<!--        android:text="Lost Packets : "-->
+<!--        android:textSize="20sp" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/lostPackets2"-->
+<!--        android:layout_width="107dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignBaseline="@id/lostPacketName"-->
+<!--        android:layout_alignParentStart="true"-->
+<!--        android:layout_alignParentTop="true"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:layout_marginStart="151dp"-->
+<!--        android:layout_marginLeft="56dp"-->
+<!--        android:layout_marginTop="99dp"-->
+<!--        android:layout_marginEnd="153dp"-->
+<!--        android:layout_toEndOf="@id/lostPacketName"-->
+<!--        android:text="0"-->
+<!--        android:textSize="20sp"-->
+<!--        android:typeface="monospace"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/customView"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/imageView"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/imageView"-->
+<!--        app:layout_constraintVertical_bias="0.050000012" />-->
+
+    <TextView
+        android:id="@+id/delayView"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="89dp"
+        android:text="Avg. RTT :  0 ms"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/lostPacketName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/delayView"
+        android:layout_alignStart="@id/delayView"
+        android:layout_marginTop="-2dp"
+        android:text="Lost Packets : "
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/lostPackets2"
+        android:layout_width="107dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/lostPacketName"
+        android:layout_toEndOf="@id/lostPacketName"
+        android:text="0"
+        android:textSize="20sp" />
+<!--    <TextView-->
+<!--        android:id="@+id/lastPacketSentName"-->
+<!--        android:layout_width="164dp"-->
+<!--        android:layout_height="32dp"-->
+<!--        android:layout_alignParentStart="true"-->
+<!--        android:layout_alignParentTop="true"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:layout_marginTop="132dp"-->
+<!--        android:layout_marginEnd="227dp"-->
+<!--        android:layout_marginRight="52dp"-->
+<!--        android:ems="10"-->
+<!--        android:inputType="textPersonName"-->
+<!--        android:text="Last Packet Sent : "-->
+<!--        android:textSize="20sp"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/customView"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/lastAckReceivedName"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/imageView"-->
+<!--        app:layout_constraintVertical_bias="0.35000002" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/lastPacketSent"-->
+<!--        android:layout_width="87dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentStart="true"-->
+<!--        android:layout_alignParentTop="true"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        android:layout_marginStart="185dp"-->
+<!--        android:layout_marginTop="135dp"-->
+<!--        android:layout_marginEnd="139dp"-->
+<!--        android:layout_marginRight="55dp"-->
+<!--        android:text="0"-->
+<!--        android:textSize="20sp"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/customView"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/lastAckReceived"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/imageView"-->
+<!--        app:layout_constraintVertical_bias="0.47000003" />-->
+    <TextView
+        android:id="@+id/lastPacketSentName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lostPacketName"
+        android:layout_alignStart="@id/lostPacketName"
+        android:layout_marginTop="2dp"
+        android:text="Last Packet Sent : "
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/lastPacketSent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/lastPacketSentName"
+        android:layout_toEndOf="@id/lastPacketSentName"
+        android:layout_marginStart="8dp"
+        android:text="0"
+        android:textSize="20sp" />
+<!--    <TextView-->
+<!--        android:id="@+id/textView4"-->
+<!--        android:layout_width="176dp"-->
+<!--        android:layout_height="34dp"-->
+<!--        android:layout_alignParentStart="true"-->
+<!--        android:layout_alignParentTop="true"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        android:layout_marginStart="21dp"-->
+<!--        android:layout_marginLeft="15dp"-->
+<!--        android:layout_marginTop="197dp"-->
+<!--        android:layout_marginEnd="214dp"-->
+<!--        android:text="Time since last RR : "-->
+<!--        android:textSize="20sp"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/customView"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/lostPackets2"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/imageView"-->
+<!--        app:layout_constraintVertical_bias="0.060000002" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/rrTimer"-->
+<!--        android:layout_width="127dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentStart="true"-->
+<!--        android:layout_alignParentTop="true"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        android:layout_marginStart="197dp"-->
+<!--        android:layout_marginLeft="40dp"-->
+<!--        android:layout_marginTop="198dp"-->
+<!--        android:layout_marginEnd="86dp"-->
+<!--        android:text="0 ms"-->
+<!--        android:textSize="20sp"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/customView"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/lostPackets2"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/imageView"-->
+<!--        app:layout_constraintVertical_bias="0.17000002" />-->
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lastAckReceivedName"
+        android:layout_alignStart="@id/lastAckReceivedName"
+        android:layout_marginTop="2dp"
+        android:text="Time since last RR : "
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/rrTimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/textView4"
+        android:layout_toEndOf="@id/textView4"
+        android:layout_marginStart="8dp"
+        android:text="0 ms"
+        android:textSize="20sp" />
+<!--    <TextView-->
+<!--        android:id="@+id/lastAckReceivedName"-->
+<!--        android:layout_width="176dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentStart="true"-->
+<!--        android:layout_alignParentTop="true"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        android:layout_marginStart="21dp"-->
+<!--        android:layout_marginLeft="120dp"-->
+<!--        android:layout_marginTop="165dp"-->
+<!--        android:layout_marginEnd="214dp"-->
+<!--        android:ems="10"-->
+<!--        android:inputType="textPersonName"-->
+<!--        android:text="Last Ack Received : "-->
+<!--        android:textSize="20sp" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/lastAckReceived"-->
+<!--        android:layout_width="95dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentStart="true"-->
+<!--        android:layout_alignParentTop="true"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        android:layout_marginStart="198dp"-->
+<!--        android:layout_marginLeft="120dp"-->
+<!--        android:layout_marginTop="165dp"-->
+<!--        android:layout_marginEnd="117dp"-->
+<!--        android:text="0"-->
+<!--        android:textSize="20sp"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/customView"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/imageView"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/imageView"-->
+<!--        app:layout_constraintVertical_bias="0.45" />-->
+
+    <TextView
+        android:id="@+id/lastAckReceivedName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lastPacketSentName"
+        android:layout_alignStart="@id/lastPacketSentName"
+        android:layout_marginTop="2dp"
+        android:text="Last Ack Received : "
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/lastAckReceived"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/lastAckReceivedName"
+        android:layout_toEndOf="@id/lastAckReceivedName"
+        android:layout_marginStart="8dp"
+        android:text="0"
+        android:textSize="20sp" />
+
+
+
+</RelativeLayout>
+<!-- Adjust margin as needed -->

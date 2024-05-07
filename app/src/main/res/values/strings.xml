@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Audio_Call</string>
+    <string name="Create_btn">Create</string>
+    <string name="Join_btn">Join</string>
+    <string name="Password_holder">Password</string>
+    <string name="RoomId_holder">Room ID</string>
+    <string name="mic_img">mic</string>
+    <string name="speak_img">speak</string>
+    <string name="listen_img">listen</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="register">Register</string>
+    <string name="click_to_login">Click to login</string>
+    <string name="click_to_register">Click to register</string>
+    <string name="logout">LOGOUT</string>
+</resources>

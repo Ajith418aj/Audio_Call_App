@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="-100dp"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_below="@id/search_contact_layout"
+        android:id="@+id/search_contact_recycler_view"
+        android:padding="10dp"/>
+    <Button
+        android:id="@+id/more_users"
+        android:layout_marginTop="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="More users..." />
+
+    <Button
+        android:id="@+id/create_btn"
+        android:layout_width="137dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="100dp"
+        android:text="@string/Create_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/join_btn"
+        android:layout_width="137dp"
+        android:layout_height="65dp"
+        android:text="@string/Join_btn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/create_btn"
+        app:layout_constraintVertical_bias="0.073" />
+
+    <TextView
+        android:id="@+id/user_details"
+        android:text="Hello world!"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/logout"
+        android:text="@string/logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
+
+</LinearLayout>
