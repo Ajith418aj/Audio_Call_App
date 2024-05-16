@@ -82,7 +82,7 @@ public class Call extends AppCompatActivity implements View.OnClickListener {
     DatagramSocket ack_socket = null;
     DatagramSocket rr_socket = null;
     InetAddress data_forwarder_server = null;
-    private boolean loudspeakerClicked = false;
+    private boolean isSpeakerOn = false;
     /////////////////////////////////////////////////////////////////////////////////////////////
     private Context mContext;
     private Packetizer packetizerObject;
@@ -294,27 +294,29 @@ public class Call extends AppCompatActivity implements View.OnClickListener {
             rr_socket.close();
             //to undo the "no sleep" during call
             endVoIPAudioCall();
-            Intent resultIntent = new Intent();
-            // Set any result data here if needed
-            setResult(RESULT_OK, resultIntent);
-            finish();
+            Intent endcall_intent = new Intent(this, MainActivity.class);
+            startActivity(endcall_intent);
+//            Intent resultIntent = new Intent();
+//            // Set any result data here if needed
+//            setResult(RESULT_OK, resultIntent);
+//            finish();
         } else if (view.getId() == R.id.animation_switch) {
             Log.d("Button", "Animation switch pressed");
             animationSwitchFunc(animationSwitch);
         } else if (view.getId() == R.id.loudspeaker) {
             Log.d("Button", "Loudspeaker button pressed");
-            loudspeakerClicked = true;
+            isSpeakerOn = true;
             ImageView loudspeaker_image = findViewById(R.id.loudspeaker);
             String tag = (String) loudspeaker_image.getTag();
             if (tag.equals("loudspeaker_off") && checkPermissions()) {
                 //startAudio(true);
                 //sendAudio();
-                loudspeakerClicked = true;
+                isSpeakerOn = true;
                 loudspeaker_image.setImageResource(R.drawable.loud_speaker_on);
                 loudspeaker_image.setTag("loudspeaker_on");
             } else {
                 //startAudio(false);
-                loudspeakerClicked = false;
+                isSpeakerOn = false;
                 loudspeaker_image.setImageResource(R.drawable.loud_speaker_off);
                 loudspeaker_image.setTag("loudspeaker_off");
             }
@@ -519,16 +521,16 @@ public class Call extends AppCompatActivity implements View.OnClickListener {
                     for(int i=0; i<audioData.length; i++) {
                         audioData[i] = (byte) (audioData[i] * (byte)amplificationFactor);
                     }
-                    // Write the modified audioData to the AudioTrack
-                    if (!loudspeakerClicked) {
-                        Log.d("Audio", "Playing via microphone");
-                        //audioTrack.write(amplifiedAudioData, 0, amplifiedAudioData.length);
-                        audioTrack.write(audioData, 0, audioData.length);
+                    // Adjust audio routing mode to loudspeaker if loudspeaker is enabled
+                    if (isSpeakerOn) {
+                        audioManager.setMode(AudioManager.MODE_NORMAL); // MODE_NORMAL for loudspeaker
+                        audioManager.setSpeakerphoneOn(true); // Enable speakerphone
                     } else {
-                        Log.d("Audio", "Playing via Loudspeaker");
-                        //loudspeaker_Track.write(amplifiedAudioData, 0, amplifiedAudioData.length);
-                        //loudspeaker_Track.write(audioData, 0, audioData.length);
+                        audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION); // MODE_IN_COMMUNICATION for earpiece
+                        audioManager.setSpeakerphoneOn(false); // Disable speakerphone
                     }
+
+                    audioTrack.write(audioData, 0, audioData.length);
                     Log.d("Socket", "Received audio");
 
                     //Now send back the sequence number received by appending ack as string
