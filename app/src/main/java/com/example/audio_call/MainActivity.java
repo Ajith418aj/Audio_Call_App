@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -87,7 +88,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             }
                         }
 
-                        recyclerView.setAdapter(new MyAdapter(getApplicationContext(), commonContacts));
+
+                        GridLayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 3);
+                        recyclerView.setLayoutManager(layoutManager);
+                        recyclerView.setAdapter(new MainAdapter(getApplicationContext(), commonContacts));
                     } else {
                         // Handle null result
                         Toast.makeText(MainActivity.this, "Failed to retrieve contacts from Firestore.", Toast.LENGTH_SHORT).show();
@@ -98,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         /////////////////////////////////////////////////////////////////////////////////////////
         auth = FirebaseAuth.getInstance();
         logout_button = findViewById(R.id.logout);
-        textView = findViewById(R.id.user_details);
+        //textView = findViewById(R.id.user_details);
         user = auth.getCurrentUser();
 
         if(user == null) {
@@ -106,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(intent);
             finish();
         } else {
-            textView.setText(user.getPhoneNumber());
+            //textView.setText(user.getPhoneNumber());
         }
 
         logout_button.setOnClickListener(new View.OnClickListener() {
