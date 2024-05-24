@@ -2,6 +2,7 @@ package com.example.audio_call;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,7 +23,7 @@ public class LoginPhoneNumberActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_phone_number);
-
+        Log.d("LoginPhoneNumberActivity", "In LoginPhoneNumberActivity");
         countryCodePicker = findViewById(R.id.login_countrycode);
         phoneInput = findViewById(R.id.login_mobile_number);
         sendOtpBtn = findViewById(R.id.send_otp_btn);

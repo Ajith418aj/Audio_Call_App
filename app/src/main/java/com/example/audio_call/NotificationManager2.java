@@ -29,6 +29,7 @@ public class NotificationManager2 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification_manager2);
+        Log.d(this.getClass().getSimpleName(), "In NotificationManager2 Activity");
 
         audioPort = getIntent().getIntExtra("audioPort", 0);
         ackPort = getIntent().getIntExtra("ackPort", 0);

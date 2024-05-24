@@ -8,12 +8,14 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Base64;
 import android.util.Log;
 
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.work.OneTimeWorkRequest;
@@ -34,12 +36,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         System.out.print("onMessageReceived function is being called");
         Log.d(TAG, "From: " + remoteMessage.getFrom());
-         preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
 
 //------------ This is w.r.t to calling feature-------------------------------
-           // SharedPreferences preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+            // SharedPreferences preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
 //------------ This is w.r.t to calling feature-------------------------------
 
             // Using a Handler to run the service-related code on a separate thread
@@ -70,8 +72,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                                 System.arraycopy(ports, 8, ackPortBytes, 0, 4);
                                 rrPort = ByteBuffer.wrap(ackPortBytes).getInt();
 
-                                Log.d("Received Ports", "Audio Port = "+ audioPort +
-                                        " Ack Port = "+ackPort + "RR Port = "+ rrPort);
+                                Log.d("Received Ports", "Audio Port = " + audioPort +
+                                        " Ack Port = " + ackPort + "RR Port = " + rrPort);
                                 SharedPreferences.Editor editor = preferences.edit();
                                 editor.putInt("audioPort", audioPort);
                                 editor.putInt("ackPort", ackPort);
@@ -101,6 +103,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private int rrPort;
     private String phone_number;
     private SharedPreferences preferences;
+
     private void handleDataPayload(Map<String, String> data) {
         // Extract data from the payload and take appropriate actions
         String title = data.get("title");
@@ -124,8 +127,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         rrPort = ByteBuffer.wrap(ackPortBytes).getInt();
 
 
-        Log.d("Received Ports", "Audio Port = "+ audioPort +
-                " Ack Port = "+ackPort + "RR Port = "+ rrPort);
+        Log.d("Received Ports", "Audio Port = " + audioPort +
+                " Ack Port = " + ackPort + "RR Port = " + rrPort);
 
         Log.d("Body", "Ports from Control Server: " + audioPort);
         Log.d("Body", "Ports from Control Server: " + decodedPortsInfo.toString());
@@ -143,7 +146,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
 
-
     @SuppressLint("LongLogTag")
     @Override
     // This function is called when the token is refreshed
@@ -155,49 +157,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @SuppressLint("LongLogTag")
     private void showNotification(String title, String body) {
-
-//------------ This is w.r.t to calling feature-------------------------------
-//        SharedPreferences preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-//        int audioPort = preferences.getInt("audioPort", -1);
-//        int ackPort = preferences.getInt("ackPort", -1);
-//        int rrPort = preferences.getInt("rrPort", -1);
-//
-//        Log.d("AudioPort", "Value: " + audioPort);
-//        Log.d("AckPort", "Value: " + ackPort);
-//        Log.d("RrPort", "Value: " + rrPort);
-//
-//        if (audioPort != -1 && ackPort != -1 && rrPort != -1) {
-//            // Create an explicit intent for the Call activity
-//            Intent callIntent = new Intent(this, Call.class);
-//            callIntent.putExtra("audioPort", audioPort);
-//            callIntent.putExtra("ackPort", ackPort);
-//            callIntent.putExtra("rrPort", rrPort);
-//
-//            // Use SharedPreferences to store the FCM token persistently
-//            String fcmTokenDuringCreate = preferences.getString("fcmToken", null);
-//            callIntent.putExtra("fcmToken", fcmTokenDuringCreate);
-//            //startActivity(intent);
-//            //startActivityForResult(callIntent, 1001);
-//
-//            // Create a unique requestCode to differentiate between different PendingIntents
-//            int requestCode = (int) System.currentTimeMillis();
-//
-//            PendingIntent callPendingIntent = PendingIntent.getActivity(this, requestCode, callIntent, 0);
-//
-//            createNotificationChannel();
-//
-//            // Build the notification
-//            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-//                    .setSmallIcon(R.drawable.ic_notification)
-//                    .setContentTitle(title)
-//                    .setContentText(body)
-//                    .setContentIntent(callPendingIntent)  // Use callPendingIntent instead of pendingIntent
-//                    .addAction(R.drawable.ic_notification, "Play", getPlayPendingIntent());
-//        }else {
-//            Log.e(TAG, "Invalid port values");
-//        }
-//------------ This is w.r.t to calling feature-------------------------------
-
 
 
         // Create the notification channel
@@ -215,6 +174,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setContentIntent(pendingIntent)
                 .addAction(R.drawable.ic_notification, "Play", getPlayPendingIntent());
 
+
         // Start the foreground service
 //        startForegroundService();
     }
@@ -222,7 +182,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private PendingIntent getPlayPendingIntent() {
         Log.e("MyFirebaseMessagingService", "getPlayPendingIntent method called");
         Intent playIntent = new Intent(this, RingingService.class);
-        playIntent.setAction(RingingService.ACTION_PLAY);
+       // playIntent.setAction(RingingService.ACTION_PLAY);
         return PendingIntent.getService(this, 0, playIntent, PendingIntent.FLAG_IMMUTABLE);
     }
 

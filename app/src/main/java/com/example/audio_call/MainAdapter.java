@@ -29,45 +29,28 @@ public class MainAdapter extends RecyclerView.Adapter<MyViewHolder> {
         return new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.search_contact_recycler_horizontal,parent,false));
     }
 
-
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        holder.nameView.setText(items.get(position).getName());
+        //holder.phoneView.setText(items.get(position).getPhone_number());
 
-        int row = position / 3; // Calculate row index (0 or 1)
-        int col = position % 3; // Calculate column index (0, 1, or 2)
+        holder.itemView.setOnClickListener(view -> {
+            Toast.makeText(context, "Adapter item clicked create object for control server", Toast.LENGTH_SHORT).show();
+            String phoneNumber = items.get(position).getPhone_number();
+            String userName = items.get(position).getName();
+            phoneNumber = phoneNumber.replaceAll("\\s", "");
 
-        // Calculate actual position in your data list based on row and column
-        int actualPosition = row * 3 + col;
-
-        // Now bind data to your views using the actualPosition
-        if (actualPosition < items.size()) {
-            User currentItem = items.get(actualPosition);
-            holder.nameView.setText(currentItem.getName());
-            holder.phoneView.setText(currentItem.getPhone_number());
-
-            holder.itemView.setOnClickListener(view -> {
-                Toast.makeText(context, "Adapter item clicked create object for control server", Toast.LENGTH_SHORT).show();
-                String phoneNumber = currentItem.getPhone_number();
-                String userName = currentItem.getName();
-                phoneNumber = phoneNumber.replaceAll("\\s", "");
-
-                Intent intent = new Intent(context, CallWaiting.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("phoneNumber", phoneNumber);
-                intent.putExtra("userName", userName);
-                context.startActivity(intent);
-            });
-        } else {
-            // Clear views if the actual position is out of bounds
-            holder.nameView.setText("");
-            holder.phoneView.setText("");
-            holder.itemView.setOnClickListener(null);
-        }
+            Intent intent = new Intent(context, CallWaiting.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra("phoneNumber", phoneNumber);
+            intent.putExtra("userName", userName);
+            context.startActivity(intent);
+        });
     }
 
     @Override
     public int getItemCount() {
-        return 6;
+        return items.size();
     }
 
 

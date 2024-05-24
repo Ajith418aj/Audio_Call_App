@@ -534,12 +534,12 @@ public class Call extends AppCompatActivity implements View.OnClickListener {
                     byte[] audioData = new byte[audioDataLength - 12];
                     System.arraycopy(audioDataWithHeaders, 12, audioData, 0, audioDataLength - 12);
 
-//                    for(int i=0; i<audioData.length; i++) {
-//                        audioData[i] = (byte) (audioData[i] * (byte)amplificationFactor);
-//                    }
+                    for(int i=0; i<audioData.length; i++) {
+                        audioData[i] = (byte) (audioData[i] * (byte)amplificationFactor);
+                    }
                     // Adjust audio routing mode to loudspeaker if loudspeaker is enabled
 //                    if (isSpeakerOn) {
-//                        audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION); // MODE_NORMAL for loudspeaker
+//                        audioManager.setMode(AudioManager.MODE_NORMAL); // MODE_NORMAL for loudspeaker
 //                        audioManager.setSpeakerphoneOn(true); // Enable speakerphone
 //                    } else {
 //                        audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION); // MODE_IN_COMMUNICATION for earpiece

@@ -59,9 +59,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
     @Override
     public int getItemCount() {
+        Log.d("Items", "Total Items = " + items.size());
         return items.size();
     }
-
-
 
 }

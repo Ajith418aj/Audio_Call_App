@@ -6,22 +6,23 @@
     android:orientation="vertical"
     android:gravity="center"
     android:layout_height="match_parent"
-    android:background="@drawable/main_gradient_background"
+    android:background="@drawable/gradient_background"
     tools:context=".MainActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_contact_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="196dp"
         android:layout_below="@id/search_contact_layout"
         android:layout_marginTop="-100dp"
-        android:padding="10dp" />
+        android:layout_marginLeft="10dp"
+        android:padding="5dp" />
 
     <Button
         android:id="@+id/more_users"
-        android:layout_marginTop="40dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
         android:text="More users..." />
 
     <Button
