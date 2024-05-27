@@ -1,14 +1,14 @@
 package com.example.audio_call;
 
-import static android.content.Context.MODE_PRIVATE;
 import static com.example.audio_call.utils.AudioCallConstants.IP_ADDRESS;
 import static com.example.audio_call.utils.AudioCallConstants.PORT_NUMBER;
 import static java.nio.ByteOrder.BIG_ENDIAN;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.util.Log;
 
 import java.io.DataOutputStream;
@@ -16,18 +16,38 @@ import java.io.IOException;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 
-public class NotificationManager extends BroadcastReceiver {
+public class NotificationManager extends AppCompatActivity {
+
+    private int audioPort;
+
+    private int ackPort;
+
+    private int rrPort;
 
     Socket socket = null;
+    public static final String ACTION_ANSWER_CALL = "com.example.audio_call.ACTION_ANSWER_CALL";
+    public static final String ACTION_STOP_RINGING = "com.example.audio_call.ACTION_STOP_RINGING";
+
 
 
     @Override
-    public void onReceive(Context context, Intent intent) {
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_notification_manager2);
+        Log.d(this.getClass().getSimpleName(), "In NotificationManager2 Activity");
 
-        int audioPort = intent.getIntExtra("audioPort", 0);
-        int ackPort = intent.getIntExtra("ackPort", 0);
-        int rrPort = intent.getIntExtra("rrPort", 0);
-        String phoneNumber = intent.getStringExtra("phone_number");
+        String action = getIntent().getAction();
+        if(action == ACTION_ANSWER_CALL) {
+            Intent localIntent = new Intent(ACTION_ANSWER_CALL);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
+        } else if (action ==  ACTION_STOP_RINGING) {
+            Intent localIntent = new Intent(ACTION_STOP_RINGING);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
+        }
+        audioPort = getIntent().getIntExtra("audioPort", 0);
+        ackPort = getIntent().getIntExtra("ackPort", 0);
+        rrPort = getIntent().getIntExtra("rrPort", 0);
+        String phoneNumber = getIntent().getStringExtra("phone_number");
 
         Log.d("NotificationManager", "Audio Port = "+ audioPort +
                 " Ack Port = "+ackPort + "RR Port = "+ rrPort);
@@ -55,12 +75,12 @@ public class NotificationManager extends BroadcastReceiver {
         });
         thread.start();
 
-        Intent callIntent = new Intent(context, Call.class);
+        Intent callIntent = new Intent(this, Call.class);
         callIntent.putExtra("audioPort", audioPort);
         callIntent.putExtra("ackPort", ackPort);
         callIntent.putExtra("rrPort", rrPort);
         callIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(callIntent);
+        this.startActivity(callIntent);
     }
     DataOutputStream dataOutputStreamInstance = null;
     public void send(byte[] data) {

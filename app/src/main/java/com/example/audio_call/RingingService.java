@@ -1,11 +1,7 @@
 package com.example.audio_call;
 
-// Example in RingingService.java
-// ...
-
 import android.app.Notification;
 import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -20,7 +16,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.ServiceCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -29,29 +25,23 @@ public class RingingService extends Service {
     private static final String TAG = "RingingService"; // Add this line
     private MediaPlayer mediaPlayer;
     //    public static final String ACTION_PLAY = "com.example.audio_call.action.PLAY";
-    public static final String ACTION_ANSWER_CALL = "com.example.audio_call.action.ANSWER_CALL";
-    public static final String ACTION_STOP_RINGING = "com.example.audio_call.action.STOP_RINGING";
+    //public static final String ACTION_ANSWER_CALL = "com.example.audio_call.action.ANSWER_CALL";
+    public static final String ACTION_STOP_RINGING = "com.example.audio_call.ACTION_STOP_RINGING";
     private Context context;
     private static final int NOTIFICATION_ID = 1; // Add this line
     private static final String CHANNEL_ID = "my_foreground_channel"; // Add this line
 
-    private final BroadcastReceiver stopRingingReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver answerCallReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (ACTION_STOP_RINGING.equals(intent.getAction())) {
-                stopRingingSound();
-            } else if (ACTION_ANSWER_CALL.equals(intent.getAction())) {
-                Log.e("Ringing Service", "Ringing Test 1");
-                stopRingingSound();
-                // Start NotificationManager2
-                Log.e("Ringing Service", "Ringing Test 2");
-                Intent notificationManagerIntent = new Intent(context, NotificationManager2.class);
-                notificationManagerIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                notificationManagerIntent.putExtras(intent.getExtras()); // Pass the extras from the intent
-                context.startActivity(notificationManagerIntent);
-            }
+
+            if(intent.getAction() == ACTION_ANSWER_CALL || intent.getAction() == ACTION_STOP_RINGING)
+             stopRingingSound();
+
+
         }
     };
+    public static final String ACTION_ANSWER_CALL = "com.example.audio_call.ACTION_ANSWER_CALL";
 
     @Override
     public void onCreate() {
@@ -62,16 +52,41 @@ public class RingingService extends Service {
         filter.addAction(ACTION_ANSWER_CALL);
         // Register the broadcast receiver
 //        IntentFilter filter = new IntentFilter(ACTION_STOP_RINGING);
-        registerReceiver(stopRingingReceiver, filter);
+    //    registerReceiver(stopRingingReceiver, filter);
+
+        // Register the local broadcast receiver
+        LocalBroadcastManager.getInstance(this).registerReceiver(answerCallReceiver,
+                new IntentFilter(NotificationManager.ACTION_ANSWER_CALL));
+        LocalBroadcastManager.getInstance(this).registerReceiver(answerCallReceiver,
+                new IntentFilter(NotificationManager.ACTION_STOP_RINGING));
     }
 
+
+    private void startNotificationManagerActivity(Intent intent) {
+        // Retrieve the extras from the intent
+        int audioPort = intent.getIntExtra("audioPort", -1);
+        int ackPort = intent.getIntExtra("ackPort", -1);
+        int rrPort = intent.getIntExtra("rrPort", -1);
+        String phone_number = intent.getStringExtra("phone_number");
+        String roomName = intent.getStringExtra("roomName");
+        String fcmToken = intent.getStringExtra("fcmToken");
+
+        // Start the NotificationManager2 activity
+        Intent activityIntent = new Intent(this, NotificationManager.class);
+        activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        activityIntent.putExtra("audioPort", audioPort);
+        activityIntent.putExtra("ackPort", ackPort);
+        activityIntent.putExtra("rrPort", rrPort);
+        activityIntent.putExtra("phone_number", phone_number);
+        activityIntent.putExtra("roomName", roomName);
+        activityIntent.putExtra("fcmToken", fcmToken);
+        startActivity(activityIntent);
+    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         Log.e("Ringing Service", "Ringing Service called");
-        String roomName = intent.getStringExtra("ROOM_NAME");
-        String password = intent.getStringExtra("PASSWORD");
         Notification notification = createNotification();
         // Display the foreground notification
         if (notification !=null) {
@@ -111,7 +126,7 @@ public class RingingService extends Service {
         }
     }
 
-    private void stopRingingSound() {
+    public void stopRingingSound() {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release();
@@ -140,10 +155,11 @@ public class RingingService extends Service {
         Log.d("RrPort", "Value: " + rrPort);
 
         if (audioPort != -1 && ackPort != -1 && rrPort != -1) {
-            Intent stopRingingIntent = new Intent(ACTION_STOP_RINGING);
-            PendingIntent stopRingingPendingIntent = PendingIntent.getBroadcast(this, 0, stopRingingIntent, PendingIntent.FLAG_IMMUTABLE);
+            Intent stopRingingIntent = new Intent(this, NotificationManager.class);
+            PendingIntent stopRingingPendingIntent = PendingIntent.getActivity(this, 0, stopRingingIntent, PendingIntent.FLAG_IMMUTABLE);
 
-            Intent answerCallIntent = new Intent(ACTION_ANSWER_CALL);
+            Intent answerCallIntent = new Intent(this, NotificationManager.class);
+            answerCallIntent.setAction(ACTION_ANSWER_CALL);
             answerCallIntent.putExtra("audioPort", audioPort);
             answerCallIntent.putExtra("ackPort", ackPort);
             answerCallIntent.putExtra("rrPort", rrPort);
@@ -151,7 +167,7 @@ public class RingingService extends Service {
             answerCallIntent.putExtra("phone_number", phone_number);
             String fcmTokenDuringCreate = preferences.getString("fcmToken", null);
             answerCallIntent.putExtra("fcmToken", fcmTokenDuringCreate);
-            PendingIntent answerCallPendingIntent = PendingIntent.getBroadcast(this, 0, answerCallIntent, PendingIntent.FLAG_IMMUTABLE);
+            PendingIntent answerCallPendingIntent = PendingIntent.getActivity(this, 0, answerCallIntent, PendingIntent.FLAG_IMMUTABLE);
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                     .setSmallIcon(R.drawable.ic_notification)
@@ -196,10 +212,10 @@ public class RingingService extends Service {
             NotificationChannel channel = new NotificationChannel(
                     CHANNEL_ID,
                     "Foreground Service Channel",
-                    NotificationManager.IMPORTANCE_DEFAULT
+                    android.app.NotificationManager.IMPORTANCE_DEFAULT
             );
 
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            android.app.NotificationManager notificationManager = getSystemService(android.app.NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
     }
@@ -207,7 +223,7 @@ public class RingingService extends Service {
     @Override
     public void onDestroy() {
         // Release resources when the service is stopped
-        unregisterReceiver(stopRingingReceiver);
+        //unregisterReceiver(stopRingingReceiver);
         stopRingingSound();
         super.onDestroy();
     }

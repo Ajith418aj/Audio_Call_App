@@ -27,7 +27,7 @@
             android:name=".CallWaiting"
             android:exported="false" />
         <activity
-            android:name=".NotificationManager2"
+            android:name=".NotificationManager"
             android:exported="false" />
         <activity
             android:name=".AllContactsActivity"
@@ -53,14 +53,11 @@
         <activity
             android:name=".CreateRoom"
             android:exported="false" />
+        <service
+            android:name=".RingingService"
+            android:foregroundServiceType="dataSync"
+            android:exported="true" />
 
-        <receiver
-            android:name=".NotificationManager"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="your_action_name_here" />
-            </intent-filter>
-        </receiver>
 
         <service
             android:name=".MyFirebaseMessagingService"
@@ -69,18 +66,11 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service> <!-- Add the RingingService class as a service -->
-        <service
-            android:name=".RingingService"
-            android:exported="false"
-            android:stopWithTask="true">
-            <intent-filter>
-                <action android:name="com.example.audio_call.action.PLAY" />
-            </intent-filter>
-        </service>
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="my_channel_id" />
+
     </application>
 
 </manifest>

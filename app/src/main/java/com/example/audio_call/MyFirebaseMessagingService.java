@@ -8,17 +8,16 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Base64;
 import android.util.Log;
 
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -186,20 +185,22 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         return PendingIntent.getService(this, 0, playIntent, PendingIntent.FLAG_IMMUTABLE);
     }
 
-    // Start the foreground service
+    // This function doesn't start the foreground but it just calls the ringing class to play ringing.mp3
     private void startForegroundService(SharedPreferences preferences) {
-        Intent serviceIntent = new Intent(this, RingingService.class);
-        serviceIntent.putExtra("ROOM_NAME", preferences.getString("roomName", ""));
-        startService(serviceIntent);
-//        Intent serviceIntent = new Intent ( this, RingingService.class );
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-//            OneTimeWorkRequest request = new OneTimeWorkRequest.Builder ( RingingService.class ).addTag ( "BACKUP_WORKER_TAG" ).build ();
-//            WorkManager.getInstance ( this ).enqueue ( request );
-//        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            this.startForegroundService ( serviceIntent );
-//        } else {
-//            this.startService ( serviceIntent );
-//        }
+        Log.e("startForegroundService", "startForegroundService");
+
+        Intent serviceIntent2 = new Intent ( getApplicationContext(), RingingService.class );
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            Log.e("startForegroundService", "startForegroundService1");
+            OneTimeWorkRequest request = new OneTimeWorkRequest.Builder ( BackupWorker.class ).addTag ( "BACKUP_WORKER_TAG" ).build ();
+            WorkManager.getInstance ( getApplicationContext() ).enqueue ( request );
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Log.e("startForegroundService", "startForegroundService2");
+            this.startForegroundService ( serviceIntent2 );
+        } else {
+            Log.e("startForegroundService", "startForegroundService3");
+            this.startService ( serviceIntent2 );
+        }
     }
 
     // Create the notification channel for devices running Android 8.0 (Oreo) and higher
