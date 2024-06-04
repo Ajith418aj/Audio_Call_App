@@ -309,14 +309,12 @@ public class CustomView extends View {
 //                e.printStackTrace();
             }
         }
-
         droppingPacket.rectangle.top = 0;
         droppingPacket.rectangle.left = 0;
         droppingPacket.rectangle.right = 0;
         droppingPacket.rectangle.bottom = 0;
 
         try {
-
             //remove the packet from the queue && remove it's entry from the map;
             packetQueue.remove(packet);
             packetAddress.remove(packet.sequenceNumber);
@@ -325,7 +323,13 @@ public class CustomView extends View {
         {
             e.printStackTrace();
         }
+    }
 
+    public void clear() {
+        packetQueue.clear();
+        packetAddress.clear();
+        maxSequenceNumberReceived = 0;
+        postInvalidate();
     }
 
 }

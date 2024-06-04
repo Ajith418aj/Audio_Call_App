@@ -78,8 +78,8 @@
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="156dp"
         android:layout_marginBottom="25dp"
-        android:tag="loudspeaker_off"
-        app:srcCompat="@drawable/loud_speaker_off" />
+        android:tag="loudspeaker_off"/>
+       <!-- app:srcCompat="@drawable/loud_speaker_off"--> />
 
 
     <!--    <TextView-->

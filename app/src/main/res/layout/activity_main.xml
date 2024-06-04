@@ -6,20 +6,23 @@
     android:orientation="vertical"
     android:gravity="center"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
     tools:context=".MainActivity">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginTop="-100dp"
-        android:layout_width="match_parent"
-        android:layout_height="220dp"
-        android:layout_below="@id/search_contact_layout"
         android:id="@+id/search_contact_recycler_view"
-        android:padding="10dp"/>
+        android:layout_width="match_parent"
+        android:layout_height="196dp"
+        android:layout_below="@id/search_contact_layout"
+        android:layout_marginTop="-100dp"
+        android:layout_marginLeft="10dp"
+        android:padding="5dp" />
+
     <Button
         android:id="@+id/more_users"
-        android:layout_marginTop="40dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
         android:text="More users..." />
 
     <Button
@@ -43,18 +46,17 @@
         app:layout_constraintTop_toBottomOf="@+id/create_btn"
         app:layout_constraintVertical_bias="0.073" />
 
-    <TextView
+    <!--<TextView
         android:id="@+id/user_details"
         android:text="Hello world!"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"/> -->
 
     <Button
         android:id="@+id/logout"
-        android:text="@string/logout"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
+        android:layout_height="wrap_content"
+        android:text="@string/logout" />
 
 
 </LinearLayout>

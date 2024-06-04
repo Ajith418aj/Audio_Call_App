@@ -38,7 +38,6 @@ public class AllContactsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_contacts);
 
-        //contactsListView = findViewById(R.id.contactsListView);
         db = FirebaseFirestore.getInstance();
         RecyclerView recyclerView = findViewById(R.id.search_contact_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -60,7 +59,6 @@ public class AllContactsActivity extends AppCompatActivity {
                 public void onContactsLoaded(ArrayList<String> registeredContacts) {
                     if (registeredContacts != null) {
                         Log.d("Contacts", "Total registered contacts = " + registeredContacts.size());
-
                         // Find common contacts
                         ArrayList<User> commonContacts = new ArrayList<>();
                         for (User phoneContact : phoneContacts) {
@@ -81,7 +79,6 @@ public class AllContactsActivity extends AppCompatActivity {
 
                         for (User user : commonContacts) {
                             String phoneNumberWithoutSpaces = user.getPhone_number().replaceAll("\\s+", ""); // Remove spaces
-
                             // Check if the phone number (after removing spaces) is already in the HashSet
                             if (phoneNumbersSet.add(phoneNumberWithoutSpaces)) {
                                 // If not, add the User object to the uniqueContacts list

@@ -92,6 +92,8 @@ public class Call extends AppCompatActivity implements View.OnClickListener {
     private int last_packet_sent = 0;
     private int maximum_sequence_number_received = 0;
     private int  reception_report_seq = 0;
+    private AudioTrack audioTrack;
+    private AudioRecord audioRecord;
     private TextView lastPacketSentView, lastAckReceivedView, lostPacketView, rrTime, delayView;
     //For calculating Loss Percentage
     Timer timerRRSent = new Timer();
@@ -289,9 +291,32 @@ public class Call extends AppCompatActivity implements View.OnClickListener {
         } else if (view.getId() == R.id.end_call) {
             Log.d("Button", "End call button pressed");
             endCallClicked = true;
-            audio_socket.close();
-            ack_socket.close();
-            rr_socket.close();
+            //-----close all the related sockets and release all the resources-------
+            // Stop and release AudioRecord and AudioTrack
+            if (audioRecord != null) {
+                audioRecord.stop();
+                audioRecord.release();
+            }
+
+            if (audioTrack != null) {
+                audioTrack.stop();
+                audioTrack.release();
+            }
+            // Close all the related sockets
+            if (audio_socket != null) {
+                audio_socket.close();
+            }
+
+            if (ack_socket != null) {
+                ack_socket.close();
+            }
+
+            if (rr_socket != null) {
+                rr_socket.close();
+            }
+            // Clear custom view state... to handle unusual behaviour of animation
+            customView.clear();
+
             //to undo the "no sleep" during call
             endVoIPAudioCall();
             Intent endcall_intent = new Intent(this, MainActivity.class);
@@ -299,7 +324,6 @@ public class Call extends AppCompatActivity implements View.OnClickListener {
 //            Intent resultIntent = new Intent();
 //            // Set any result data here if needed
 //            setResult(RESULT_OK, resultIntent);
-//            finish();
         } else if (view.getId() == R.id.animation_switch) {
             Log.d("Button", "Animation switch pressed");
             animationSwitchFunc(animationSwitch);
@@ -355,12 +379,6 @@ public class Call extends AppCompatActivity implements View.OnClickListener {
 
             while (true) {
 
-                /*byte[] buffRR = new byte[22];
-
-                DatagramPacket lenPacket = new DatagramPacket(buffRR, buffRR.length);
-                rr_socket.receive(lenPacket);
-                int packetSize = ByteBuffer.wrap(lenPacket.getData(), 0, 4).getInt();*/
-
                 byte[] receptionReport = new byte[BUFFER_SIZE];
                 //byte[] receptionReport = new byte[BUFFER_SIZE];
                 DatagramPacket rrPacket = new DatagramPacket(receptionReport, receptionReport.length);
@@ -394,7 +412,7 @@ public class Call extends AppCompatActivity implements View.OnClickListener {
                     return;
                 }
             }
-            AudioRecord audioRecord = new AudioRecord(MediaRecorder.AudioSource.VOICE_COMMUNICATION, SAMPLE_RATE, CHANNEL_CONFIG, AUDIO_FORMAT, 8820);
+            audioRecord = new AudioRecord(MediaRecorder.AudioSource.VOICE_COMMUNICATION, SAMPLE_RATE, CHANNEL_CONFIG, AUDIO_FORMAT, 8820);
 
             byte[] buffer = new byte[BUFFER_SIZE];
             // Generate a random SSRC value
@@ -485,18 +503,16 @@ public class Call extends AppCompatActivity implements View.OnClickListener {
 
         byte[] buffer = new byte[BUFFER_SIZE];
         try {
-            AudioTrack audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO,
-                    AudioFormat.ENCODING_PCM_16BIT, AUD_BUF_SIZE, AudioTrack.MODE_STREAM);
-            audioTrack.play();
-//            AudioTrack audioTrack = new AudioTrack(AudioManager.MODE_IN_CALL, SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO,
+//            audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO,
 //                    AudioFormat.ENCODING_PCM_16BIT, AUD_BUF_SIZE, AudioTrack.MODE_STREAM);
 //            audioTrack.play();
-//            AudioTrack loudspeaker_Track = new AudioTrack(AudioManager.MODE_IN_COMMUNICATION, SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO,
+//            AudioTrack audioTrack = new AudioTrack(AudioManager.MODE_IN_CALL, SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO,
 //                    AudioFormat.ENCODING_PCM_16BIT, AUD_BUF_SIZE, AudioTrack.MODE_STREAM);
-//            AudioTrack loudspeaker_Track = new AudioTrack(AudioManager.MODE_IN_CALL, SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO,
-//                    AudioFormat.ENCODING_PCM_16BIT, AUD_BUF_SIZE, AudioTrack.MODE_STREAM);
-//            loudspeaker_Track.play();
-//            audioManager.setSpeakerphoneOn(false);
+
+            AudioTrack audioTrack = new AudioTrack(AudioManager.MODE_IN_COMMUNICATION, SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO,
+                    AudioFormat.ENCODING_PCM_16BIT, AUD_BUF_SIZE, AudioTrack.MODE_STREAM);
+            audioTrack.play();
+
 
             while (!endCallClicked) {
                 try {
@@ -522,13 +538,13 @@ public class Call extends AppCompatActivity implements View.OnClickListener {
                         audioData[i] = (byte) (audioData[i] * (byte)amplificationFactor);
                     }
                     // Adjust audio routing mode to loudspeaker if loudspeaker is enabled
-                    if (isSpeakerOn) {
-                        audioManager.setMode(AudioManager.MODE_NORMAL); // MODE_NORMAL for loudspeaker
-                        audioManager.setSpeakerphoneOn(true); // Enable speakerphone
-                    } else {
-                        audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION); // MODE_IN_COMMUNICATION for earpiece
-                        audioManager.setSpeakerphoneOn(false); // Disable speakerphone
-                    }
+//                    if (isSpeakerOn) {
+//                        audioManager.setMode(AudioManager.MODE_NORMAL); // MODE_NORMAL for loudspeaker
+//                        audioManager.setSpeakerphoneOn(true); // Enable speakerphone
+//                    } else {
+//                        audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION); // MODE_IN_COMMUNICATION for earpiece
+//                        audioManager.setSpeakerphoneOn(false); // Disable speakerphone
+//                    }
 
                     audioTrack.write(audioData, 0, audioData.length);
                     Log.d("Socket", "Received audio");
