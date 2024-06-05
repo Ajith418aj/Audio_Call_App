@@ -108,7 +108,7 @@ public class CustomView extends View {
                 if(currentPacket.isDropped)
                     currentColor = colors[5];
                 if(currentPacket.gotAck)
-                    currentColor = colors[6];
+                    //currentColor = colors[6];
 
                 paint.setColor(currentColor);
                 canvas.drawRect(currentPacket.rectangle, paint);
